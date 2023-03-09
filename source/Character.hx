@@ -12,6 +12,10 @@ class Character extends FlxSprite {
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
 	public var barColor:FlxColor;
+	
+	public var stunned:Bool = false;
+	public var dadVar:Float = 4;
+	public var danceIdle:Bool = false;
 
 	public var holdTimer:Float = 0;
 
@@ -57,8 +61,7 @@ class Character extends FlxSprite {
 				barColor = 0xFFA2044B;
 			case 'san1':
 				// THAT MF !!!!!!
-				tex = Paths.getSparrowAtlas('characters/san1', 'san1');
-				frames = tex;
+				frames = Paths.getSparrowAtlas('characters/san1', 'san1');
 				animation.addByPrefix('idle', 'idle', 24);
 				animation.addByPrefix('singUP', 'up', 48);
 				animation.addByPrefix('singRIGHT', 'right', 30);
@@ -78,8 +81,7 @@ class Character extends FlxSprite {
 				// tr5va: sequel of tr4va
 			case 'sheopng':
 				// sheo is a bitch !!!!!!
-				tex = Paths.getSparrowAtlas('characters/sheorsivpng', 'san1');
-				frames = tex;
+				frames = Paths.getSparrowAtlas('characters/sheorsivpng', 'san1');
 				animation.addByPrefix('idle', 'Idle', 24);
 				animation.addByPrefix('singUP', 'Up', 48);
 				animation.addByPrefix('singRIGHT', 'Right', 30);
@@ -97,8 +99,7 @@ class Character extends FlxSprite {
 				playAnim('idle');
 			case 'shyllpng':
 				// dumbass
-				tex = Paths.getSparrowAtlas('characters/shyllispng', 'san1');
-				frames = tex;
+				frames = Paths.getSparrowAtlas('characters/shyllispng', 'san1');
 				animation.addByPrefix('idle', 'Idle', 24);
 				animation.addByPrefix('singUP', 'Up', 48);
 				animation.addByPrefix('singRIGHT', 'Right', 30);
@@ -156,6 +157,7 @@ class Character extends FlxSprite {
 				barColor = 0xFF31b0d1;
 		}
 
+		recalculateDanceIdle();
 		dance();
 
 		if (isPlayer)
@@ -167,8 +169,6 @@ class Character extends FlxSprite {
 			if (animation.curAnim.name.startsWith('sing')) {
 				holdTimer += elapsed;
 			}
-
-			var dadVar:Float = 4;
 
 			if (curCharacter == 'dad')
 				dadVar = 6.1;
@@ -183,19 +183,17 @@ class Character extends FlxSprite {
 	private var danced:Bool = false;
 
 	public function dance() {
-		switch (curCharacter) {
-			case 'gf':
-				if (!animation.curAnim.name.startsWith('hair')) {
-					danced = !danced;
+		if (danceIdle) {
+			if (!animation.curAnim.name.startsWith('hair')) {
+				danced = !danced;
 
-					if (danced)
-						playAnim('danceRight');
-					else
-						playAnim('danceLeft');
-				}
-			default:
-				playAnim('idle');
-		}
+				if (danced)
+					playAnim('danceRight');
+				else
+					playAnim('danceLeft');
+			}
+	    } else
+			playAnim('idle');
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void {
@@ -218,6 +216,27 @@ class Character extends FlxSprite {
 				danced = !danced;
 			}
 		}
+	}
+	
+	public var danceEveryNumBeats:Int = 2;
+	private var settingCharacterUp:Bool = true;
+	public function recalculateDanceIdle() {
+		var lastDanceIdle:Bool = danceIdle;
+		danceIdle = (animation.getByName('danceLeft') != null && animation.getByName('danceRight') != null);
+
+		if(settingCharacterUp)
+			danceEveryNumBeats = (danceIdle ? 1 : 2);
+		else if(lastDanceIdle != danceIdle) {
+			var calc:Float = danceEveryNumBeats;
+			if(danceIdle)
+				calc /= 2;
+			else
+				calc *= 2;
+
+			danceEveryNumBeats = Math.round(Math.max(calc, 1));
+		}
+
+		settingCharacterUp = false;
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0) {

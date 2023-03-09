@@ -21,7 +21,8 @@ class MenuCharacter extends FlxSprite {
 	private static var settings:Map<String, CharacterSetting> = [
 		'bf' => new CharacterSetting(-25, -55, 1.1, true),
 		'gf' => new CharacterSetting(-50, -10, 1.0, true),
-		'dad' => new CharacterSetting(-125, 40, 1.0)
+		'dad' => new CharacterSetting(0, 0, 1.0),
+		'san1' => new CharacterSetting(-100, 50, 0.7)
 	];
 
 	private var flipped:Bool = false;
@@ -49,6 +50,8 @@ class MenuCharacter extends FlxSprite {
 					idleAnim = 'M GF Idle';
 				case 'dad':
 					idleAnim = 'M Dad Idle';
+				case 'san1':
+					idleAnim = 'idle story';
 			}
 
 			animation.addByPrefix('idle', idleAnim, 24);

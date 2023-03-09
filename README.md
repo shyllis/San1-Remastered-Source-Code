@@ -9,8 +9,8 @@
 
 # Credit
 ### Kade Engine Legacy
-- [Goldie_5](https://youtube.com/@goldie-5250) - Main Programmer
-- [Shyllis](https://www.twitter.com/dolpshy) - Programmer
+- [Shyllis](https://www.twitter.com/dolpshy) - Main Programmer
+- [Goldie_5](https://youtube.com/@goldie-5250) - Programmer
 - [Makit](https://youtube.com/@makit8854) - Artist
 
 ### Vs San1 Remastered

@@ -552,9 +552,13 @@ class PlayState extends MusicBeatState {
 		var swagCounter:Int = 0;
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer) {
-			dad.dance();
-			gf.dance();
-			boyfriend.playAnim('idle');
+			if (!hideGf && tmr.loopsLeft % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
+				gf.dance();
+			if (tmr.loopsLeft % boyfriend.danceEveryNumBeats == 0 && boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.stunned)
+				boyfriend.dance();
+			if (tmr.loopsLeft % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
+				dad.dance();
+
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ready', "set", "go"]);
@@ -1108,11 +1112,21 @@ class PlayState extends MusicBeatState {
 			FlxG.switchState(new ChartingState());
 		}
 
-		if (FlxG.keys.justPressed.NINE) {
+		if (FlxG.keys.justPressed.EIGHT) {
 			#if windows
 			DiscordClient.changePresence("Animation Debug", null, null, true);
 			#end
 			FlxG.switchState(new offsets.AnimationDebug());
+		}
+
+		if (FlxG.keys.justPressed.NINE) {
+			if (boyfriend.curCharacter == 'bf') {
+				if (iconP1.animation.curAnim.name == 'bf-old') iconP1.animation.play(SONG.player1);
+				else iconP1.animation.play('bf-old');
+			} else if (dad.curCharacter == 'san1') {
+				if (iconP2.animation.curAnim.name == 'san1-old') iconP2.animation.play(SONG.player2);
+				else iconP2.animation.play('san1-old');
+			}
 		}
 
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.50)));
@@ -1276,6 +1290,12 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (generatedMusic) {
+			if (!inCutscene) {
+				if(boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * 0.0011 * boyfriend.dadVar && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
+					boyfriend.dance();
+				}
+			}
+
 			notes.forEachAlive(function(daNote:Note) {
 				if (daNote.tooLate) {
 					daNote.active = false;
@@ -1779,11 +1799,6 @@ class PlayState extends MusicBeatState {
 			}
 		});
 
-		if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && (!holdArray.contains(true) || FlxG.save.data.botplay)) {
-			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
-				boyfriend.playAnim('idle');
-		}
-
 		playerStrums.forEach(function(spr:FlxSprite) {
 			if (pressArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
 				spr.animation.play('pressed');
@@ -1797,6 +1812,10 @@ class PlayState extends MusicBeatState {
 			} else
 				spr.centerOffsets();
 		});
+		
+		if (boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * 0.0011 * boyfriend.dadVar && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
+			boyfriend.dance();
+		}
 	}
 
 	function noteMiss(direction:Int = 1, daNote:Note):Void {
@@ -2059,12 +2078,15 @@ class PlayState extends MusicBeatState {
 		if (SONG.notes[Math.floor(curStep / 16)] != null) {
 			if (SONG.notes[Math.floor(curStep / 16)].changeBPM)
 				Conductor.changeBPM(SONG.notes[Math.floor(curStep / 16)].bpm);
-			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection && dad.curCharacter != 'gf')
-				dad.dance();
-			else if (curBeat % gfSpeed == 0 && dad.curCharacter == 'gf')
-				dad.dance();
 		}
 		
+		if (gf != null && curBeat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
+			gf.dance();
+		if (curBeat % boyfriend.danceEveryNumBeats == 0 && boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.stunned)
+			boyfriend.dance();
+		if (curBeat % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
+			dad.dance();
+
 		if (curSong.toLowerCase() == 'sanistic' && curStep >= 256 && curStep < 384 && FlxG.camera.zoom < 1.35) {
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
@@ -2080,12 +2102,6 @@ class PlayState extends MusicBeatState {
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
-
-		if (curBeat % gfSpeed == 0)
-			gf.dance();
-
-		if (!boyfriend.animation.curAnim.name.startsWith("sing"))
-			boyfriend.playAnim('idle');
 
 		if (curBeat % 16 == 15 && SONG.song == 'Tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48) {
 			boyfriend.playAnim('hey', true);
