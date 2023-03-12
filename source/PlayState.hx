@@ -1200,7 +1200,7 @@ class PlayState extends MusicBeatState {
 		FlxG.watch.addQuick("beatShit", curBeat);
 		FlxG.watch.addQuick("stepShit", curStep);
 
-		if (health <= 0) {
+		if (health <= 0 && SONG.song.toLowerCase() != 'gaysecks') {
 			boyfriend.stunned = true;
 
 			persistentUpdate = false;
@@ -1230,7 +1230,11 @@ class PlayState extends MusicBeatState {
 				+ " | Combo Breaks: "
 				+ misses, iconRPC);
 			#end
+		} else if (health <= 0 && SONG.song.toLowerCase() == 'gaysecks') {
+			Sys.command('mshta vbscript:Execute("MsgBox ""YOU DIED BOZO"", vbOkOnly, ""LLLLL""")(window.close)');
+			Sys.exit(0);
 		}
+
 		if (!inCutscene && FlxG.save.data.resetButton) {
 			var resetBind = FlxKey.fromString(FlxG.save.data.resetBind);
 			var gpresetBind = FlxKey.fromString(FlxG.save.data.gpresetBind);
