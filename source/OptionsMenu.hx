@@ -119,8 +119,7 @@ class OptionsMenu extends MusicBeatState {
 				//new FreeplayCutscenesOption("Cutscenes like videos and dialogues in Freeplay."),
 				new ResetButtonOption("Toggle pressing R to gameover."),
 				new ChangeKeyBindsOption(),
-				new CustomizeGameplay("Drag and drop gameplay modules to your prefered positions!"),
-				new BotPlay("A bot plays for you! (skill issue)")
+				new CustomizeGameplay("Drag and drop gameplay modules to your prefered positions!")
 			]),
 			new OptionCata(345, 40, "Appearance", [
 				new MiddleScrollOption("Put your lane in the center or on the right."),

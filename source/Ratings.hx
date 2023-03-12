@@ -3,11 +3,9 @@ import flixel.FlxG;
 class Ratings {
 	public static function GenerateLetterRank(accuracy:Float) {
 		var ranking:String = "N/A";
-		if (FlxG.save.data.botplay)
-			ranking = "BotPlay";
 
 		if (PlayState.misses == 0 && PlayState.bads == 0 && PlayState.shits == 0 && PlayState.goods == 0)
-			ranking = "(MFC)";
+			ranking = "(SFC)";
 		else if (PlayState.misses == 0 && PlayState.bads == 0 && PlayState.shits == 0 && PlayState.goods >= 1)
 			ranking = "(GFC)";
 		else if (PlayState.misses == 0)
@@ -65,8 +63,6 @@ class Ratings {
 
 		if (accuracy == 0)
 			ranking = "N/A";
-		else if (FlxG.save.data.botplay)
-			ranking = "BotPlay";
 
 		return ranking;
 	}
@@ -100,13 +96,14 @@ class Ratings {
 	}
 
 	public static function CalculateRanking(score:Int, scoreDef:Int, accuracy:Float):String {
-		return (!FlxG.save.data.botplay ? "Score:"
+		return ("Score:"
 			+ (Conductor.safeFrames != 10 ? score + " (" + scoreDef + ")" : "" + score)
-			+ " | Misses:"
+			+ " | Combo Breaks:"
 			+ PlayState.misses
 			+ " | Accuracy:"
-			+ (FlxG.save.data.botplay ? "N/A" : HelperFunctions.truncateFloat(accuracy, 2) + " %")
+			+ HelperFunctions.truncateFloat(accuracy, 2) 
+			+ " %"
 			+ " | "
-			+ GenerateLetterRank(accuracy) : "");
+			+ GenerateLetterRank(accuracy));
 	}
 }
