@@ -540,11 +540,11 @@ class PlayState extends MusicBeatState {
 		var swagCounter:Int = 0;
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer) {
-			if (!hideGf && tmr.loopsLeft % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
+			if (!hideGf && tmr.loopsLeft % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0)
 				gf.dance();
-			if (tmr.loopsLeft % boyfriend.danceEveryNumBeats == 0 && boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.stunned)
+			if (tmr.loopsLeft % boyfriend.danceEveryNumBeats == 0)
 				boyfriend.dance();
-			if (tmr.loopsLeft % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
+			if (tmr.loopsLeft % dad.danceEveryNumBeats == 0)
 				dad.dance();
 
 
@@ -1120,6 +1120,11 @@ class PlayState extends MusicBeatState {
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.50)));
 		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, 0.50)));
 
+        if(iconP1.angle < 0)
+        	iconP1.angle = CoolUtil.coolLerp(iconP1.angle, 0, Conductor.crochet / 1000 / 4);
+        if(iconP2.angle > 0)
+        	iconP2.angle = CoolUtil.coolLerp(iconP2.angle, 0, Conductor.crochet / 1000 / 4);
+
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
 
@@ -1128,17 +1133,12 @@ class PlayState extends MusicBeatState {
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
 
-		if (health > 2)
-			health = 2;
-		if (healthBar.percent < 20)
-			iconP1.animation.curAnim.curFrame = 1;
-		else
-			iconP1.animation.curAnim.curFrame = 0;
+		if (health > 2) health = 2;
 
-		if (healthBar.percent > 80)
-			iconP2.animation.curAnim.curFrame = 1;
-		else
-			iconP2.animation.curAnim.curFrame = 0;
+		if (healthBar.percent < 20) iconP1.animation.curAnim.curFrame = 1;
+		else iconP1.animation.curAnim.curFrame = 0;
+		if (healthBar.percent > 80) iconP2.animation.curAnim.curFrame = 1;
+		else iconP2.animation.curAnim.curFrame = 0;
 
 		if (startingSong) {
 			if (startedCountdown) {
@@ -1743,6 +1743,11 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
+		if (boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * 0.0011 * boyfriend.dadVar) {
+			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
+				boyfriend.dance();
+		}
+
 		playerStrums.forEach(function(spr:FlxSprite) {
 			if (pressArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
 				spr.animation.play('pressed');
@@ -1772,7 +1777,7 @@ class PlayState extends MusicBeatState {
 			if (FlxG.random.float(1, 100) == 69) 
 				FlxG.sound.play(Paths.sound('vineboom', 'shared'), FlxG.random.float(0.1, 0.2));
 			else 
-				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3, 'shared'), FlxG.random.float(0.1, 0.2));
 
 			switch (direction) {
 				case 0:
@@ -2040,8 +2045,8 @@ class PlayState extends MusicBeatState {
 			if (SONG.notes[Math.floor(curStep / 16)].changeBPM)
 				Conductor.changeBPM(SONG.notes[Math.floor(curStep / 16)].bpm);
 		}
-		
-		if (curSong.toLowerCase() == 'sanistic' && curStep >= 256 && curStep < 384 && FlxG.camera.zoom < 1.35) {
+
+		if (FlxG.camera.zoom < 1.35 && curBeat % 4 == 0) {
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
@@ -2050,15 +2055,24 @@ class PlayState extends MusicBeatState {
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
-
-		if (FlxG.camera.zoom < 1.35 && curBeat % 4 == 0) {
+		
+		if (curSong.toLowerCase() == 'sanistic' && curStep >= 256 && curStep < 384 && FlxG.camera.zoom < 1.35) {
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
 
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
 		iconP2.setGraphicSize(Std.int(iconP2.width + 30));
+		
+		if(curBeat % 2 == 0) {
+			iconP1.angle = 0;
+			iconP2.angle = 0;
+			iconP1.angle -= 20;
+			iconP2.angle += 20;
+		}
 
+		iconP1.updateHitbox();
+		iconP2.updateHitbox();
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
 
