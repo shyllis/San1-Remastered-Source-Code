@@ -32,6 +32,12 @@
 	<SubTexture name="idle0012" x="237" y="437" width="239" height="438" frameX="-14" frameY="-1" frameWidth="264" frameHeight="439"/>
 	<SubTexture name="idle0013" x="237" y="437" width="239" height="438" frameX="-14" frameY="-1" frameWidth="264" frameHeight="439"/>
 	<SubTexture name="idle0014" x="237" y="437" width="239" height="438" frameX="-14" frameY="-1" frameWidth="264" frameHeight="439"/>
+	<SubTexture name="idle0015" x="237" y="437" width="239" height="438" frameX="-14" frameY="-1" frameWidth="264" frameHeight="439"/>
+	<SubTexture name="idle0016" x="237" y="437" width="239" height="438" frameX="-14" frameY="-1" frameWidth="264" frameHeight="439"/>
+	<SubTexture name="idle0017" x="237" y="437" width="239" height="438" frameX="-14" frameY="-1" frameWidth="264" frameHeight="439"/>
+	<SubTexture name="idle0018" x="237" y="437" width="239" height="438" frameX="-14" frameY="-1" frameWidth="264" frameHeight="439"/>
+	<SubTexture name="idle0019" x="237" y="437" width="239" height="438" frameX="-14" frameY="-1" frameWidth="264" frameHeight="439"/>
+	<SubTexture name="idle0020" x="237" y="437" width="239" height="438" frameX="-14" frameY="-1" frameWidth="264" frameHeight="439"/>
 	<SubTexture name="left0000" x="476" y="437" width="401" height="391" frameX="0" frameY="-19" frameWidth="401" frameHeight="410"/>
 	<SubTexture name="left0001" x="476" y="437" width="401" height="391" frameX="0" frameY="-19" frameWidth="401" frameHeight="410"/>
 	<SubTexture name="left0002" x="877" y="437" width="373" height="403" frameX="-28" frameY="-5" frameWidth="401" frameHeight="410"/>

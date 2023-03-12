@@ -96,14 +96,13 @@ class TitleState extends MusicBeatState {
 		logoBl.x - 50;
 		add(logoBl);
 
-		titleText = new FlxSprite(100, FlxG.height * 0.9);
+		titleText = new FlxSprite(120, FlxG.height * 0.81);
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
 		titleText.antialiasing = true;
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
-		titleText.screenCenter(X);
 		add(titleText);
 
 		credGroup = new FlxGroup();
@@ -227,8 +226,9 @@ class TitleState extends MusicBeatState {
 
 	override function beatHit() {
 		super.beatHit();
-
-		logoBl.animation.play('bump');
+		
+		if (curBeat % 2 == 0)
+			logoBl.animation.play('bump');
 
 		FlxG.log.add(curBeat);
 

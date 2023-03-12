@@ -334,6 +334,7 @@ class PlayState extends MusicBeatState {
 					tweenCamIn();
 				}
 			case "san1":
+				dad.x += 50;
 				dad.y += 300;
 			case "shyllpng":
 				dad.x += 300;
@@ -1291,9 +1292,7 @@ class PlayState extends MusicBeatState {
 
 		if (generatedMusic) {
 			if (!inCutscene) {
-				if(boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * 0.0011 * boyfriend.dadVar && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
-					boyfriend.dance();
-				}
+				keyShit();
 			}
 
 			notes.forEachAlive(function(daNote:Note) {
@@ -1464,9 +1463,6 @@ class PlayState extends MusicBeatState {
 				spr.centerOffsets();
 			}
 		});
-
-		if (!inCutscene)
-			keyShit();
 	}
 
 	function endSong():Void {
@@ -1799,6 +1795,11 @@ class PlayState extends MusicBeatState {
 			}
 		});
 
+		if (boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * 0.0011 * boyfriend.dadVar && (!holdArray.contains(true) || FlxG.save.data.botplay)) {
+			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
+				boyfriend.dance();
+		}
+
 		playerStrums.forEach(function(spr:FlxSprite) {
 			if (pressArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
 				spr.animation.play('pressed');
@@ -1812,10 +1813,6 @@ class PlayState extends MusicBeatState {
 			} else
 				spr.centerOffsets();
 		});
-		
-		if (boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * 0.0011 * boyfriend.dadVar && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
-			boyfriend.dance();
-		}
 	}
 
 	function noteMiss(direction:Int = 1, daNote:Note):Void {
@@ -1943,10 +1940,31 @@ class PlayState extends MusicBeatState {
 		super.stepHit();
 		
 		// HARDCODING FOR EVENTS!
+		if (SONG.song.toLowerCase() == 'sani') {
+			switch (curStep) {
+				case 64 | 640 | 704:
+					defaultCamZoom = 1.1;
+				case 672 | 736 | 844:
+					defaultCamZoom = 1.15;
+				case 132 | 196 | 260 | 324 | 384 | 416 | 448 | 480 | 516 | 768 | 832 | 964:
+					defaultCamZoom = 0.9;
+				case 164 | 226 | 288 | 356 | 396 | 428 | 460 | 492 | 580 | 788 | 900:
+					defaultCamZoom = 1;
+				case 544 | 864 | 927:
+					defaultCamZoom = 0.95;
+				case 608 | 800 | 992:
+					defaultCamZoom = 1.05;
+				case 1024:
+					defaultCamZoom = 0.8;
+				case 1088:
+					defaultCamZoom = 0.75;
+			}
+		}
+
 		if (SONG.song.toLowerCase() == 'worst summer') {
 			switch (curStep) {
 				case 2 | 688:
-					defaultCamZoom = 0.65;
+					defaultCamZoom = 0.67;
 				case 12 | 36 | 64 | 232 | 236 | 396 | 512 | 656 | 960:
 					defaultCamZoom = 0.7;
 				case 20 | 48 | 80 | 128 | 148 | 184 | 224 | 256 | 402 | 448 | 496 | 624 | 704 | 768 | 800 | 832 | 864:
@@ -1968,7 +1986,7 @@ class PlayState extends MusicBeatState {
 				case 752 | 912:
 					defaultCamZoom = 0.95;
 				case 1152:
-					defaultCamZoom = 0.65;
+					defaultCamZoom = 0.67;
 					blackscreen(true);
 			}
 		}
@@ -2080,14 +2098,12 @@ class PlayState extends MusicBeatState {
 				Conductor.changeBPM(SONG.notes[Math.floor(curStep / 16)].bpm);
 		}
 		
-		if (gf != null && curBeat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
-			gf.dance();
-		if (curBeat % boyfriend.danceEveryNumBeats == 0 && boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.stunned)
-			boyfriend.dance();
-		if (curBeat % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
-			dad.dance();
-
 		if (curSong.toLowerCase() == 'sanistic' && curStep >= 256 && curStep < 384 && FlxG.camera.zoom < 1.35) {
+			FlxG.camera.zoom += 0.015;
+			camHUD.zoom += 0.03;
+		}
+
+		if (curSong.toLowerCase() == 'sani' && curStep >= 788 && curStep < 1028 && FlxG.camera.zoom < 1.35) {
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
@@ -2102,6 +2118,13 @@ class PlayState extends MusicBeatState {
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
+
+		if (!hideGf && curBeat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
+			gf.dance();
+		if (curBeat % boyfriend.danceEveryNumBeats == 0 && boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.stunned)
+			boyfriend.dance();
+		if (curBeat % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
+			dad.dance();
 
 		if (curBeat % 16 == 15 && SONG.song == 'Tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48) {
 			boyfriend.playAnim('hey', true);

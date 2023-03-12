@@ -58,6 +58,8 @@ class Character extends FlxSprite {
 
 				playAnim('danceRight');
 
+				danceIdle = true;
+
 				barColor = 0xFFA2044B;
 			case 'san1':
 				// THAT MF !!!!!!
@@ -165,18 +167,17 @@ class Character extends FlxSprite {
 	}
 
 	override function update(elapsed:Float) {
-		if (!curCharacter.startsWith('bf')) {
+		if (!isPlayer) {
 			if (animation.curAnim.name.startsWith('sing')) {
 				holdTimer += elapsed;
 			}
 
-			if (curCharacter == 'dad')
-				dadVar = 6.1;
 			if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001) {
 				dance();
 				holdTimer = 0;
 			}
 		}
+
 		super.update(elapsed);
 	}
 
@@ -193,7 +194,7 @@ class Character extends FlxSprite {
 					playAnim('danceLeft');
 			}
 	    } else
-			playAnim('idle');
+			playAnim('idle', true);
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void {
