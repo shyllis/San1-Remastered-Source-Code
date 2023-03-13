@@ -86,17 +86,16 @@ class TitleState extends MusicBeatState {
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
-		logoBl = new FlxSprite(-150, -50);
+		logoBl = new FlxSprite(-150, 50);
 		logoBl.frames = Paths.getSparrowAtlas('san1LogoBumpin', 'san1');
 		logoBl.antialiasing = true;
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
-		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
-		logoBl.screenCenter();
+		logoBl.screenCenter(X);
 		logoBl.x - 50;
 		add(logoBl);
 
-		titleText = new FlxSprite(120, FlxG.height * 0.81);
+		titleText = new FlxSprite(123, FlxG.height * 0.81);
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
@@ -228,7 +227,7 @@ class TitleState extends MusicBeatState {
 		super.beatHit();
 		
 		if (curBeat % 2 == 0)
-			logoBl.animation.play('bump');
+			logoBl.animation.play('bump', true);
 
 		FlxG.log.add(curBeat);
 
@@ -259,7 +258,7 @@ class TitleState extends MusicBeatState {
 				addMoreText('Night');
 			case 15:
 				addMoreText('Funkin');
-				addMoreText('Vs San1');
+				addMoreText('Vs Sani Remastered');
 			case 16:
 				skipIntro();
 		}

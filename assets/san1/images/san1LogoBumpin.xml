@@ -18,8 +18,4 @@
 	<SubTexture name="logo bumpin0013" x="0" y="556" width="733" height="535" frameX="-14" frameY="-10" frameWidth="762" frameHeight="556"/>
 	<SubTexture name="logo bumpin0014" x="0" y="556" width="733" height="535" frameX="-14" frameY="-10" frameWidth="762" frameHeight="556"/>
 	<SubTexture name="logo bumpin0015" x="0" y="556" width="733" height="535" frameX="-14" frameY="-10" frameWidth="762" frameHeight="556"/>
-	<SubTexture name="logo bumpin0016" x="0" y="556" width="733" height="535" frameX="-14" frameY="-10" frameWidth="762" frameHeight="556"/>
-	<SubTexture name="logo bumpin0017" x="0" y="556" width="733" height="535" frameX="-14" frameY="-10" frameWidth="762" frameHeight="556"/>
-	<SubTexture name="logo bumpin0018" x="0" y="556" width="733" height="535" frameX="-14" frameY="-10" frameWidth="762" frameHeight="556"/>
-	<SubTexture name="logo bumpin0019" x="0" y="556" width="733" height="535" frameX="-14" frameY="-10" frameWidth="762" frameHeight="556"/>
 </TextureAtlas>

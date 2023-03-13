@@ -98,6 +98,8 @@ class Character extends FlxSprite {
 				
 				barColor = 0xFF5C5C5C;
 
+				flipX = true;
+				
 				playAnim('idle');
 			case 'shyllpng':
 				// dumbass
