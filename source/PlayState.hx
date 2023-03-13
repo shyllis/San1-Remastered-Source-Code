@@ -1239,35 +1239,7 @@ class PlayState extends MusicBeatState {
 			var resetBind = FlxKey.fromString(FlxG.save.data.resetBind);
 			
 			if ((FlxG.keys.anyJustPressed([resetBind]))) {
-				boyfriend.stunned = true;
-
-				persistentUpdate = false;
-				persistentDraw = false;
-				paused = true;
-
-				if (SepVocalsNull)
-					vocals.stop();
-				else
-					for (vocals in [P1vocals, P2vocals])
-						vocals.stop();
-				FlxG.sound.music.stop();
-
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-
-				#if windows
-				DiscordClient.changePresence("GAME OVER -- "
-					+ SONG.song
-					+ " ("
-					+ storyDifficultyText
-					+ ") "
-					+ Ratings.GenerateLetterRank(accuracy),
-					"\nAcc: "
-					+ HelperFunctions.truncateFloat(accuracy, 2)
-					+ "% | Score: "
-					+ songScore
-					+ " | Combo Breaks: "
-					+ misses, iconRPC);
-				#end
+				health == 0;
 			}
 		}
 
