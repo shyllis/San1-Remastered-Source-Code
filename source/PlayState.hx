@@ -1639,6 +1639,8 @@ class PlayState extends MusicBeatState {
 				if (daNote.isSustainNote && daNote.canBeHit && daNote.mustPress && holdArray[daNote.noteData])
 					goodNoteHit(daNote);
 			});
+		} else if (boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * 0.0011 * boyfriend.dadVar && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
+			boyfriend.dance();
 		}
 
 		if (pressArray.contains(true) && generatedMusic) {
@@ -1718,7 +1720,7 @@ class PlayState extends MusicBeatState {
 					mashViolations++;
 			}
 		}
-
+		
 		playerStrums.forEach(function(spr:FlxSprite) {
 			if (pressArray[spr.ID] && spr.animation.curAnim.name != 'confirm')
 				spr.animation.play('pressed');
@@ -1817,12 +1819,6 @@ class PlayState extends MusicBeatState {
 			mashViolations = 0;
 
 		if (!note.wasGoodHit) {
-			if (!note.isSustainNote) {
-				popUpScore(note);
-				combo += 1;
-			} else
-				totalNotesHit += 1;
-
 			switch (note.noteData) {
 				case 2:
 					boyfriend.playAnim('singUP', true);
@@ -1833,6 +1829,12 @@ class PlayState extends MusicBeatState {
 				case 0:
 					boyfriend.playAnim('singLEFT', true);
 			}
+
+			if (!note.isSustainNote) {
+				popUpScore(note);
+				combo += 1;
+			} else
+				totalNotesHit += 1;
 
 			playerStrums.forEach(function(spr:FlxSprite) {
 				if (Math.abs(note.noteData) == spr.ID)
@@ -2047,11 +2049,11 @@ class PlayState extends MusicBeatState {
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
 
-		if (!hideGf && curBeat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
+		if (!hideGf && curBeat % Math.round(gfSpeed * gf.danceEveryNumBeats) == 0 && !gf.animation.curAnim.name.startsWith("sing") && !gf.stunned)
 			gf.dance();
-		if (curBeat % boyfriend.danceEveryNumBeats == 0 && boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.stunned)
+		if (curBeat % boyfriend.danceEveryNumBeats == 0 && !boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.stunned)
 			boyfriend.dance();
-		if (curBeat % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
+		if (curBeat % dad.danceEveryNumBeats == 0  && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
 			dad.dance();
 
 		if (curBeat % 16 == 15 && SONG.song == 'Tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48) {
